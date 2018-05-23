@@ -25,7 +25,7 @@ class HomePage extends React.Component {
           <h1>McDonalds</h1>
           <h2>{this.state.message}</h2>
           {this.state.img &&
-          <img src={'http://localhost:9000'+this.state.img} alt=""/>
+          <img src={this.state.img} alt=""/>
           }
         </div>
     );

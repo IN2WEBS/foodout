@@ -11,7 +11,7 @@ app.get('/', (req,res)=>{
 app.get('/api/welcome', (req,res)=>{
     res.json({
       message:'Welcome!',
-      url:'/heroimage.png'
+      url:'/images/heroimage.png'
     })
 });
 
