@@ -5,13 +5,16 @@ import Checkout from './Checkout';
 import Orders from './Orders';
 import Categories from './Categories';
 import {connect} from 'react-redux';
-import * as actions from '../../actions/categories';
+import * as actionsCat from '../../actions/categories';
+import * as actionsMenu from '../../actions/menu';
+const actions = {...actionsCat, ...actionsMenu};
+console.log(actions);
 
 class Shop extends React.Component {
 
   componentDidMount() {
-    this.props.fetchCategories('Gerimai');
-    console.log('komponentas uzsikrove');
+    this.props.fetchCategories();
+    this.props.fetchMenu();
   }
 
   render() {

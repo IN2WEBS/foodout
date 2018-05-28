@@ -3,7 +3,6 @@ const categories = (state=[],action)=>{
 
   switch (action.type){
     case 'FETCH_CATEGORIES':
-      console.log(action.payload.categories);
       return [...state, ...action.payload.categories];
     default : return state
   }
