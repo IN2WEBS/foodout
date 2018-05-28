@@ -1,5 +1,32 @@
 .menu{
     float: right;
-    background: #bfbfc5;
     width:85%;
+    margin-top:30px;
+    h1{
+        font-size:25px;
+    }
+    h2{
+        font-size:20px;
+        color: $color-red;
+        line-height:3;
+    }
+    .menu-list{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .menu-item{
+        width:20%;
+        margin:20px;
+        cursor: pointer;
+        img{
+            width:100%;
+        }
+        h3{
+            font-size:20px;
+        }
+        h4{
+            font-size:18px;
+        }
+    }
 }

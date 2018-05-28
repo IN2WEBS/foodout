@@ -1,10 +1,10 @@
 const categories = [
   {
-    name:'curgers',
+    name:'burgers',
     img:'/images/categories/burgers.png'
   },
   {
-    name:'deserts',
+    name:'desserts',
     img:'/images/categories/deserts.png'
   },
   {
@@ -16,7 +16,7 @@ const categories = [
     img:'/images/categories/meals.png'
   },
   {
-    name:'nuggets',
+    name:'snacks',
     img:'/images/categories/nuggets.png'
   },
   {
