@@ -1,5 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import * as actions from '../../actions/orders';
+import {Link} from 'react-router-dom';
 
 const Menu = (props) => {
 
@@ -8,7 +10,9 @@ const Menu = (props) => {
     return item.category === props.active
   }).map((item, i) => {
     return (
-        <div key={i} className="menu-item">
+        <div
+            onClick={()=>props.addOrder(item)}
+            key={i} className="menu-item">
           <h3>{item.name}</h3>
           <img src={item.img} alt=""/>
           <h4>{item.price}</h4>
@@ -22,6 +26,10 @@ const Menu = (props) => {
         <div className="menu-list">
           {items}
         </div>
+        {
+          props.orders.length>0 &&
+          <Link to="/checkout">Checkout</Link>
+        }
       </div>
   );
 };
@@ -29,8 +37,9 @@ const Menu = (props) => {
 const mapStateToProps = (state) => {
   return {
     menu: state.menu,
-    active: state.active
+    active: state.active,
+    orders:state.orders
   }
 };
 
-export default connect(mapStateToProps)(Menu)
+export default connect(mapStateToProps, actions)(Menu)

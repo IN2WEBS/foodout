@@ -21,7 +21,6 @@ class Shop extends React.Component {
     return (
         <div className="shop">
           <Route exact path="/shop" component={Menu}/>
-          <Route exact path="/shop/checkout" component={Checkout}/>
           <Categories/>
           <Orders/>
         </div>
