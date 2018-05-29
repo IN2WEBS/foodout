@@ -9,7 +9,7 @@ const port = process.env.PORT || 9000;
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
   res.send('🚧 project is under construction 🚧')
@@ -21,19 +21,33 @@ app.get('/api/welcome', (req, res) => {
   })
 });
 app.get('/api/categories', (req, res) => {
-   res.json({categories})
+  res.json({categories})
 });
-app.get('/api/menu', (req,res)=>{
-    console.log('fetching menu');
-    res.json({menu})
+app.get('/api/menu', (req, res) => {
+  console.log('fetching menu');
+  res.json({menu})
 });
-app.post('/api/orders', (req,res)=>{
-   console.log(req.body);
-   const order = `User:${req.body.name}, address: ${req.body.address} \n`;
-   fs.appendFile('order.txt', order, (err)=>{
-       if(err) console.log(err);
-   });
-   res.send('ok')
+app.post('/api/orders', (req, res) => {
+  // console.log(req.body);
+  const {name, address, phone, orders} = req.body;
+
+  const ordersString = orders.reduce((total, item)=>{
+      return total+ `${item.name} ${item.price} \n`
+  },'');
+
+  const order = `
+=============================\n
+name: ${name}\n 
+address: ${address}\n 
+phone: ${phone}\n
+orders:\n
+${ordersString}
+`;
+
+  fs.appendFile('order.txt', order, (err)=>{
+      if(err) console.log(err);
+  });
+  res.send('ok')
 });
 
 
