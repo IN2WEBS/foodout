@@ -1,8 +1,31 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import * as actions from '../../actions/categories'
+import * as actions from '../../actions/categories';
+import { Field, reduxForm } from 'redux-form'
+import axios from 'axios'
 
 class AdminMenu extends React.Component {
+
+  state={
+    message:'',
+    item:[]
+  };
+
+  addProduct = (values)=>{
+      console.log(values);
+      axios.post('/api/admin/additem', values).then((res)=>{
+          console.log(res.data.message);
+          this.setState({message:res.data.message})
+
+      })
+  };
+
+  componentDidMount(){
+    // darot axios.get uzklausa i serveri pasirinktu route
+    // serveryje padarom route.get pasirinktu adresu
+    // response grazinam is db gautus irasus
+  }
+
   render() {
 
     const categories = this.props.categories.map((item, i) => {
@@ -35,6 +58,12 @@ class AdminMenu extends React.Component {
           <ul>
             {categories}
           </ul>
+          <form onSubmit={this.props.handleSubmit(this.addProduct)}>
+            <Field name="name" component="input" type="text" />
+            <Field name="price" component="input" type="number" />
+            <button type="submit">Add</button>
+          </form>
+          <h2>{this.state.message}</h2>
           <div className="menu-list">
             {items}
           </div>
@@ -49,4 +78,10 @@ const mapStateToProps = (state) => {
     active: state.active
   }
 };
+
+AdminMenu = reduxForm({
+  // a unique name for the form
+  form: 'menu'
+})(AdminMenu);
+
 export default connect(mapStateToProps, actions)(AdminMenu)
