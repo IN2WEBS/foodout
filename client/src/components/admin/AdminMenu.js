@@ -1,26 +1,34 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import * as actions from '../../actions/categories';
-import { Field, reduxForm } from 'redux-form'
+import * as actionsCat from '../../actions/categories';
+import * as actionsMenu from '../../actions/menu';
+import {Field, reduxForm} from 'redux-form'
 import axios from 'axios'
+const actions = {...actionsCat, ...actionsMenu};
 
 class AdminMenu extends React.Component {
 
-  state={
-    message:'',
-    item:[]
+  state = {
+    message: '',
+    item: []
   };
 
-  addProduct = (values)=>{
-      console.log(values);
-      axios.post('/api/admin/additem', values).then((res)=>{
-          console.log(res.data.message);
-          this.setState({message:res.data.message})
+  addProduct = (values) => {
+    values.category = this.props.active;
 
-      })
+    console.log(values);
+    axios.post('/api/admin/additem', values).then((res) => {
+
+      console.log(res.data);
+      this.setState({message: res.data.message});
+
+      //itraukiam nauja item i reduceri pagal gauta response
+      const {name, price, category} = res.data;
+      this.props.addItem({name,price,category})
+    })
   };
 
-  componentDidMount(){
+  componentDidMount() {
     // darot axios.get uzklausa i serveri pasirinktu route
     // serveryje padarom route.get pasirinktu adresu
     // response grazinam is db gautus irasus
@@ -31,8 +39,8 @@ class AdminMenu extends React.Component {
     const categories = this.props.categories.map((item, i) => {
       return (
           <li
-              className={this.props.active===item.name? 'active-cat' : null}
-              onClick={()=>this.props.switchCategory(item.name)}
+              className={this.props.active === item.name ? 'active-cat' : null}
+              onClick={() => this.props.switchCategory(item.name)}
               key={i}>
             {item.name}
           </li>
@@ -58,11 +66,13 @@ class AdminMenu extends React.Component {
           <ul>
             {categories}
           </ul>
+          {this.props.active &&
           <form onSubmit={this.props.handleSubmit(this.addProduct)}>
-            <Field name="name" component="input" type="text" />
-            <Field name="price" component="input" type="number" />
+            <Field name="name" component="input" type="text" placeholder="name"/>
+            <Field name="price" component="input" type="number" placeholder="price"/>
             <button type="submit">Add</button>
           </form>
+          }
           <h2>{this.state.message}</h2>
           <div className="menu-list">
             {items}
