@@ -1,23 +1,45 @@
 const express = require('express');
 const router = express.Router();
 const Item = require('../models/itemModel');
+const multer  = require('multer');
 
-router.post('/api/admin/additem', async (req, res) => {
-  console.log(req.body);
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads')
+  },
+  filename: function (req, file, cb) {
+    console.log(file);
+    cb(null, file.originalname)
+  }
+});
 
-  // naujas irasas i DB
-  const item = new Item({
-    name: req.body.name,
-    price: req.body.price,
-    category:req.body.category
-  });
-  await item.save();
-  res.send({
-    message: 'new item saved',
-    name:item.name,
-    price:item.price,
-    category:item.category
-  })
+const upload = multer({ storage: storage });
+
+router.post('/api/admin/additem',upload.single('itemimage'), async (req, res) => {
+  try {
+    console.log(req.file);
+    console.log(req.body);
+    // naujas irasas i DB
+
+    const item = new Item({
+      name: req.body.name,
+      price: req.body.price,
+      category:req.body.category,
+      img:'/uploads/'+req.file.originalname
+    });
+    await item.save();
+    res.send({
+      message: 'new item saved',
+      name:item.name,
+      price:item.price,
+      category:item.category,
+      img:item.img
+    });
+
+  }catch (err){
+    console.log(err.message);
+    res.status(400).send({message:'ups, something went wrong'})
+  }
 
 });
 

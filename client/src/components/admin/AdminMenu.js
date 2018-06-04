@@ -2,29 +2,43 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as actionsCat from '../../actions/categories';
 import * as actionsMenu from '../../actions/menu';
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm,reset} from 'redux-form'
 import axios from 'axios'
+import Dropzone from 'react-dropzone';
+
 const actions = {...actionsCat, ...actionsMenu};
 
 class AdminMenu extends React.Component {
 
   state = {
     message: '',
-    item: []
+    item: [],
+    file:''
+  };
+  
+  uploadImage = (files)=>{
+      this.setState({file:files[0]})
   };
 
   addProduct = (values) => {
-    values.category = this.props.active;
 
     console.log(values);
-    axios.post('/api/admin/additem', values).then((res) => {
+    // sukuriam objekta ir jam priskiriam formos savybes
+    const formData = new FormData();
+    formData.append('name', values.name);
+    formData.append('price', values.price);
+    formData.append('category', this.props.active);
+    formData.append('itemimage', this.state.file);
+    axios.post('/api/admin/additem', formData).then((res) => {
 
       console.log(res.data);
       this.setState({message: res.data.message});
 
       //itraukiam nauja item i reduceri pagal gauta response
-      const {name, price, category} = res.data;
-      this.props.addItem({name,price,category})
+      const {name, price, category,img} = res.data;
+      this.props.addItem({name,price,category,img:img});
+      this.setState({file:''});
+      this.props.dispatch(reset('menu'));
     })
   };
 
@@ -67,11 +81,29 @@ class AdminMenu extends React.Component {
             {categories}
           </ul>
           {this.props.active &&
-          <form onSubmit={this.props.handleSubmit(this.addProduct)}>
-            <Field name="name" component="input" type="text" placeholder="name"/>
-            <Field name="price" component="input" type="number" placeholder="price"/>
-            <button type="submit">Add</button>
-          </form>
+          <div>
+            <Dropzone
+                style={{
+                  width:'120px',
+                  height:'120px',
+                  margin:'10px auto',
+                  backgroundImage:`url(${this.state.file.preview})`,
+                  backgroundSize:'cover',
+                  backgroundPosition:'center',
+                  border:'1px solid red'
+                }}
+                onDrop={this.uploadImage}>
+              <p>Drop item image here</p>
+            </Dropzone>
+            <form onSubmit={this.props.handleSubmit(this.addProduct)}>
+              <Field autoComplete="off" name="name" component="input" type="text" placeholder="name"/>
+              <Field autoComplete="off" name="price" component="input" type="number" placeholder="price"/>
+              <button type="submit">Add</button>
+            </form>
+
+            {/*<p>{this.state.file.name}</p>*/}
+            {/*<img src={this.state.file.preview} alt=""/>*/}
+          </div>
           }
           <h2>{this.state.message}</h2>
           <div className="menu-list">
