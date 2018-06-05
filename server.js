@@ -26,6 +26,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', publicRoutes);
 app.use('/', adminRoutes);
 
+if(process.env.NODE_ENV==='production'){
+  console.log('test prod');
+  console.log(__dirname+'/client/build/index.html');
+  app.get('/*', (req,res)=>{
+      res.sendFile(__dirname+'/client/build/index.html')
+  })
+}
+
 
 
 app.listen(port, () => {
