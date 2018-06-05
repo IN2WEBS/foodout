@@ -20,6 +20,8 @@ mongoose.connection
 const port = process.env.PORT || 9000;
 
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/client/build'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 // publick routes naudojimas
