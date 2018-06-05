@@ -35,18 +35,13 @@ class AdminMenu extends React.Component {
       this.setState({message: res.data.message});
 
       //itraukiam nauja item i reduceri pagal gauta response
-      const {name, price, category,img} = res.data;
-      this.props.addItem({name,price,category,img:img});
+      const {name, price, category,img, _id} = res.data;
+      this.props.addItem({name,price,category,img, _id});
       this.setState({file:''});
       this.props.dispatch(reset('menu'));
     })
   };
 
-  componentDidMount() {
-    // darot axios.get uzklausa i serveri pasirinktu route
-    // serveryje padarom route.get pasirinktu adresu
-    // response grazinam is db gautus irasus
-  }
 
   render() {
 
@@ -65,12 +60,15 @@ class AdminMenu extends React.Component {
     const items = this.props.menu.filter(item => {
       return item.category === this.props.active
     }).map((item, i) => {
+      console.log(item._id);
       return (
           <div key={i} className="menu-item">
             <h3>{item.name}</h3>
             <img src={item.img} alt=""/>
             <h4>{item.price}</h4>
-            <h5>remove</h5>
+            <h5 onClick={()=>this.props.removeItem(item._id)}>
+              remove
+            </h5>
           </div>
       )
     });
