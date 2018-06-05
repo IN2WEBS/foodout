@@ -14,7 +14,7 @@ mongoose.Promise = global.Promise;
 // prisijungimas
 // mongoose.connect('mongodb://admin:admin1234@ds033966.mlab.com:33966/mcdonalds');
 // mongoose.connect('mongodb://admin:mcdonalds9@ds147420.mlab.com:47420/foodoutapp');
-mongoose.connect('mongodb://admin:foodout9@ds147420.mlab.com:47420/foodoutapp');
+mongoose.connect('mongodb://admin1:admin1@ds147420.mlab.com:47420/foodoutapp');
 mongoose.connection
     .once('open', ()=>console.log('connected to DB'))
     .on('error', (e)=>console.log(e));
