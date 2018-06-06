@@ -5,9 +5,19 @@ import Orders from './AdminOrders';
 import * as menuActions from '../../actions/menu';
 import * as catActions from '../../actions/categories';
 import {connect} from 'react-redux';
+import io from 'socket.io-client';
+
 const actions = {...menuActions, ...catActions};
 
 class Admin extends React.Component{
+
+    constructor(props){
+        super(props);
+        const socket = io('http://localhost:9000');
+        socket.on('connect', function(){
+            console.log('connect to server');
+        });
+    }
 
     componentDidMount(){
       this.props.fetchMenu();

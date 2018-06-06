@@ -40,6 +40,12 @@ if(process.env.NODE_ENV==='production'){
 
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`server is running on port ${port}`);
+});
+
+const io = require('socket.io')(server);
+
+io.on('connection', (socket)=>{
+    console.log('user connected');
 });
