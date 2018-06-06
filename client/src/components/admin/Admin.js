@@ -14,11 +14,11 @@ class Admin extends React.Component{
 
     constructor(props){
         super(props);
-        const socket = io('http://localhost:9000');
-        socket.on('connect', function(){
+        this.socket = io('http://localhost:9000');
+        this.socket.on('connect', function(){
             console.log('connect to server');
         });
-        socket.on('order', function (data) {
+        this.socket.on('order', function (data) {
             console.log(data);
             props.addActiveOrder(data)
         })
@@ -36,6 +36,9 @@ class Admin extends React.Component{
           <aside>
             <NavLink to="/admin/orders" activeClassName="active">Orders</NavLink>
             <NavLink to="/admin/menu" activeClassName="active">Menu</NavLink>
+              <div onClick={()=>this.socket.emit('test', 'message') }>
+                  test socket
+              </div>
           </aside>
           <Switch>
             <Route exact path="/admin/orders" component={Orders}/>

@@ -48,6 +48,9 @@ const io = require('socket.io')(server);
 
 io.on('connection', (socket)=>{
     console.log('user connected');
+    socket.on('test', (data)=>{
+        console.log(data);
+    })
 });
 
 app.set('socketio', io);
