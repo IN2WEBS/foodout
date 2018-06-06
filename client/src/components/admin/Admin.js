@@ -17,6 +17,9 @@ class Admin extends React.Component{
         socket.on('connect', function(){
             console.log('connect to server');
         });
+        socket.on('order', function (data) {
+            console.log(data);
+        })
     }
 
     componentDidMount(){
