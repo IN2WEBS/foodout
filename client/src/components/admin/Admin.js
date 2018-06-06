@@ -4,10 +4,11 @@ import Menu from './AdminMenu';
 import Orders from './AdminOrders';
 import * as menuActions from '../../actions/menu';
 import * as catActions from '../../actions/categories';
+import * as addActiveOrder from '../../actions/orders';
 import {connect} from 'react-redux';
 import io from 'socket.io-client';
 
-const actions = {...menuActions, ...catActions};
+const actions = {...menuActions, ...catActions, ...addActiveOrder};
 
 class Admin extends React.Component{
 
@@ -19,6 +20,7 @@ class Admin extends React.Component{
         });
         socket.on('order', function (data) {
             console.log(data);
+            props.addActiveOrder(data)
         })
     }
 

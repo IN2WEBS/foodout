@@ -1,12 +1,34 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-const AdminOrders = (props)=>{
+const AdminOrders = (props) => {
+    const orders = props.activeOrders.map((order, i) => {
+        const items = order.orders.map((item, idx) => {
+            return (
+                <li key={idx}>{item.name} {item.category}</li>
+            );
+        });
+        return (
+            <div className="active-order" key={i}>
+                <h3>{order.name}</h3>
+                <h3>{order.address}</h3>
+                <h3>{order.phone}</h3>
+                <ul>{items}</ul>
+            </div>
+        );
+    });
+
     return (
         <div className="admin-orders">
-          Orders
+            {orders}
         </div>
     );
 };
 
+const mapStateToProps = (state) => {
+    return {
+        activeOrders: state.activeOrders
+    }
+};
 
-export default AdminOrders
+export default connect(mapStateToProps)(AdminOrders)
