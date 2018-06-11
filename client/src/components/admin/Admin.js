@@ -5,17 +5,20 @@ import Orders from './AdminOrders';
 import * as menuActions from '../../actions/menu';
 import * as catActions from '../../actions/categories';
 import * as addActiveOrder from '../../actions/orders';
+import * as userActions from '../../actions/user';
 import {connect} from 'react-redux';
 import io from 'socket.io-client';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
-const actions = {...menuActions, ...catActions, ...addActiveOrder};
+const actions = {...menuActions, ...catActions, ...addActiveOrder, ...userActions};
 
-class Admin extends React.Component{
+class Admin extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.socket = io('http://localhost:9000');
-        this.socket.on('connect', function(){
+        this.socket.on('connect', function () {
             console.log('connect to server');
         });
         this.socket.on('order', function (data) {
@@ -24,28 +27,50 @@ class Admin extends React.Component{
         })
     }
 
-    componentDidMount(){
-      this.props.fetchMenu();
-      this.props.fetchCategories();
+    componentWillMount() {
+        // if(token) token = token.split(' ')[1];
+        // console.log(token);
+        // const decoded = jwt.decode(token);
+        // console.log('decoded', decoded);
+        let token = localStorage.getItem('token');
+        if (!this.props.user.name && !token) this.props.history.push('/login');
     }
 
-    render(){
-        return (
-        <div className="admin">
+    componentDidMount() {
+        this.props.fetchMenu();
+        this.props.fetchCategories();
+    }
 
-          <aside>
-            <NavLink to="/admin/orders" activeClassName="active">Orders</NavLink>
-            <NavLink to="/admin/menu" activeClassName="active">Menu</NavLink>
-              <div onClick={()=>this.socket.emit('test', 'message') }>
-                  test socket
-              </div>
-          </aside>
-          <Switch>
-            <Route exact path="/admin/orders" component={Orders}/>
-            <Route exact path="/admin/menu" component={Menu}/>
-          </Switch>
-        </div>
+    render() {
+        return (
+            <div className="admin">
+
+                <aside>
+                    <NavLink to="/admin/orders" activeClassName="active">Orders</NavLink>
+                    <NavLink to="/admin/menu" activeClassName="active">Menu</NavLink>
+                    <div onClick={() => this.socket.emit('test', 'message')}>
+                        test socket
+                    </div>
+                    <button onClick={()=>{
+                        this.props.logout();
+                        this.props.history.push('/login');
+                    }}>
+                        Logout
+                    </button>
+                </aside>
+                <Switch>
+                    <Route exact path="/admin/orders" component={Orders}/>
+                    <Route exact path="/admin/menu" component={Menu}/>
+                </Switch>
+            </div>
         );
     }
 }
-export default connect(null, actions)(Admin)
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
+
+export default connect(mapStateToProps, actions)(Admin)

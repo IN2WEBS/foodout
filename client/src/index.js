@@ -8,6 +8,8 @@ import menuReducer from './reducers/menuReducer';
 import categoriesReducer from './reducers/categoriesReducer';
 import activeReducer from './reducers/activeReducer';
 import activeOrderReducer from "./reducers/activeOrderReducer";
+import userReducer from "./reducers/userReducer";
+
 
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
@@ -20,6 +22,7 @@ const rootReducer = combineReducers({
     categories: categoriesReducer,
     active: activeReducer,
     activeOrders: activeOrderReducer,
+    user: userReducer,
     form: formReducer
 });
 

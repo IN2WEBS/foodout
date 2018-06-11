@@ -5,3 +5,6 @@ export const ADD_ITEM ='ADD_ITEM';
 export const ADD_ORDER ='ADD_ORDER';
 export const REMOVE_ITEM ='REMOVE_ITEM';
 export const ADD_ACTIVE_ORDER ='ADD_ACTIVE_ORDER';
+export const NEW_USER ='NEW_USER';
+export const AUTH_ERROR ='AUTH_ERROR';
+export const LOGOUT ='LOGOUT';
